@@ -1,8 +1,7 @@
-use plog::{ok, warn, error, debug, info};
+use plog::{debug, error, info, ok, warn};
 
 fn main() {
-    let vec: Vec<_> = (0..10)
-        .collect();
+    let vec: Vec<_> = (0..10).collect();
     ok!("it's working! {vec:?}");
     info!("processing `vec`! {vec:?}");
     debug!("well it's working! {vec:?}");

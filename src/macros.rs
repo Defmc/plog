@@ -13,29 +13,29 @@ macro_rules! debug {
     ($($args:tt)+) => {
         plog::core_log!(Grey, "DEBG", $($args)+)
     }
-}  
-  
+}
+
 #[macro_export]
 macro_rules! info {
     ($($args:tt)+) => {
         plog::core_log!(White, "INFO", $($args)+)
     }
-}  
-  
+}
+
 #[macro_export]
 macro_rules! warn {
     ($($args:tt)+) => {
         plog::core_log!(Yellow, "WARN", $($args)+)
     }
-}  
-  
+}
+
 #[macro_export]
 macro_rules! error {
     ($($args:tt)+) => {
         plog::core_log!(Red, "ERRO", $($args)+)
     }
-}  
-  
+}
+
 #[macro_export]
 macro_rules! ok {
     ($($args:tt)+) => {
