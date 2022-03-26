@@ -4,10 +4,14 @@ use crossterm::{
     execute,
     style::{Attribute, Color, Print, ResetColor, SetAttribute, SetForegroundColor},
 };
-use std::{env, fs::File, io::{self, Write}};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::error::Error;
 use parking_lot::{const_mutex, Mutex};
+use std::error::Error;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::{
+    env,
+    fs::File,
+    io::{self, Write},
+};
 
 static LOG_FILE: Mutex<Option<File>> = const_mutex(None);
 static USE_LOG_FILE: AtomicBool = AtomicBool::new(false);
