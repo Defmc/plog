@@ -1,7 +1,8 @@
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
 pub fn datetime(input: &mut String) {
-    #[cfg(feature = "datetime")] {
+    #[cfg(feature = "datetime")]
+    {
         use chrono::Local;
         let datetime = Local::now().format(" %Y-%m-%d %H:%M:%S");
         input.push_str(&datetime.to_string());
@@ -12,7 +13,7 @@ pub fn datetime(input: &mut String) {
 macro_rules! context {
     ($input:tt) => {
         $input.push_str(&format!(" at {}:{}", file!(), line!()))
-    }
+    };
 }
 
 #[macro_export]

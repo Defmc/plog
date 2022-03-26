@@ -1,17 +1,20 @@
+use crate::{self as plog, error, info, ok, warn};
 use std::thread;
-use crate::{ok, info, warn, error, self as plog};
 
 #[test]
 fn multithread() {
     info!("Application started");
     let thrds: Vec<_> = (0..=1000)
-        .map(|x| thread::spawn(move || {
-            ok!("{x}th thread initialized");
-            ok!("{x}th thread finalized");
-        }))
+        .map(|x| {
+            thread::spawn(move || {
+                ok!("{x}th thread initialized");
+                ok!("{x}th thread finalized");
+            })
+        })
         .collect();
 
-    thrds.into_iter()
+    thrds
+        .into_iter()
         .for_each(|thrd| assert!(thrd.join().is_ok()));
 }
 
