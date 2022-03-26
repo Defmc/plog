@@ -1,11 +1,14 @@
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
-pub fn datetime(input: &mut String) {
+#[allow(clippy::ptr_arg)]
+// Impossible to use `&mut str`.
+// Function `String::push_str` is needed when `datetime` feature is enabled
+pub fn datetime(_input: &mut String) {
     #[cfg(feature = "datetime")]
     {
         use chrono::Local;
         let datetime = Local::now().format(" %Y-%m-%d %H:%M:%S");
-        input.push_str(&datetime.to_string());
+        _input.push_str(&datetime.to_string());
     }
 }
 
