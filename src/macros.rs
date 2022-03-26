@@ -1,9 +1,27 @@
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
+pub fn datetime(input: &mut String) {
+    #[cfg(feature = "datetime")] {
+        use chrono::Local;
+        let datetime = Local::now().format(" %Y-%m-%d %H:%M:%S");
+        input.push_str(&datetime.to_string());
+    }
+}
+
+#[macro_export]
+macro_rules! context {
+    ($input:tt) => {
+        $input.push_str(&format!(" at {}:{}", file!(), line!()))
+    }
+}
+
 #[macro_export]
 macro_rules! core_log {
     ($color:tt, $prefix:tt, $($args:tt)+) => {
-        plog::log(crossterm::style::Color::$color, $prefix, format!($($args)+))
+        let mut prefix = $prefix.into();
+        plog::macros::datetime(&mut prefix);
+        plog::context!(prefix);
+        plog::log(crossterm::style::Color::$color, &prefix, format!($($args)+))
             .expect(plog::macros::ERROR_LOG)
     }
 }
