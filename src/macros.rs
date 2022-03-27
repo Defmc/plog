@@ -15,7 +15,8 @@ pub fn datetime(_input: &mut String) {
 #[macro_export]
 macro_rules! context {
     ($input:tt) => {
-        #[cfg(feature = "context")] {
+        #[cfg(feature = "context")]
+        {
             $input.push_str(&format!(" at {}:{}", file!(), line!()))
         }
     };
