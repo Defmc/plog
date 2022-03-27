@@ -9,7 +9,7 @@ keywords = ["log"]
 categories = ["development-tools", "accessibility", "command-line-utilities", "config"]
 
 [dependencies]
-crossterm = "0.23.1"
+crossterm = { version = "0.23.1", optional = true }
 parking_lot = { version = "0.12.0", optional = true }
 chrono = { version = "0.4.19", optional = true }
 
@@ -18,4 +18,5 @@ date = ["chrono"]
 time = ["chrono"]
 context = []
 impls = []
+colored = ["crossterm"]
 persistent = ["parking_lot"]

@@ -36,7 +36,7 @@ macro_rules! core_log {
         let mut prefix = String::from($prefix);
         plog::macros::datetime(&mut prefix);
         plog::context!(prefix);
-        plog::log(crossterm::style::Color::$color, &prefix, format!($($args)+))
+        plog::log(#[cfg(feature = "colored")] crossterm::style::Color::$color, &prefix, format!($($args)+))
             .expect(plog::macros::ERROR_LOG)
     }}
 }
