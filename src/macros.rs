@@ -25,14 +25,13 @@ pub fn datetime(_input: &mut String) {
 macro_rules! context {
     ($input:tt) => {
         $input.push_str(&format!(" at {}:{}", file!(), line!()))
-    }
+    };
 }
 
 #[cfg(not(feature = "context"))]
 #[macro_export]
 macro_rules! context {
-    ($input:tt) => {
-    }
+    ($input:tt) => {};
 }
 
 #[macro_export]
@@ -60,8 +59,6 @@ macro_rules! core_log {
         plog::log($prefix, format!($($args)+))
     }
 }
-
-
 
 #[macro_export]
 macro_rules! debug {

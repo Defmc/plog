@@ -13,7 +13,6 @@ pub trait ShowErr {
     fn show_err(self) -> Self;
 }
 
-
 impl<T: Debug, U: Debug> ResultLog for Result<T, U> {
     fn log(self) -> Self {
         match self {
