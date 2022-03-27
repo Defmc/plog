@@ -30,7 +30,6 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --features="date time context persistent impls"
 
   fmt:
     name: Rustfmt

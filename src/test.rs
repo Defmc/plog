@@ -1,4 +1,3 @@
-use crate::impls::*;
 use crate::{self as plog, error, info, ok, warn};
 use std::thread;
 
@@ -30,13 +29,17 @@ fn pretty_out() {
 
 #[test]
 fn result() {
-    let n: Result<u8, ()> = Ok(2);
-    let m: Result<u8, ()> = Err(());
-    let exec = |f: fn(&Result<u8, ()>)| {
-        f(&n);
-        f(&m);
-    };
-    exec(ResultLog::log);
-    exec(ShowOk::show_ok);
-    exec(ShowErr::show_err);
+    #[cfg(feature = "impls")]
+    {
+        use crate::impls::*;
+        let n: Result<u8, ()> = Ok(2);
+        let m: Result<u8, ()> = Err(());
+        let exec = |f: fn(&Result<u8, ()>)| {
+            f(&n);
+            f(&m);
+        };
+        exec(ResultLog::log);
+        exec(ShowOk::show_ok);
+        exec(ShowErr::show_err);
+    }
 }
