@@ -17,7 +17,6 @@ mod impls {
     pub use result_log::*;
 }
 
-
 #[cfg(test)]
 pub mod test;
 

@@ -1,5 +1,5 @@
-use crate::{warn, info, ok};
 use crate as plog;
+use crate::{info, ok, warn};
 use std::fmt::Debug;
 
 pub trait OptionLog {
@@ -12,7 +12,7 @@ impl<T: Debug> OptionLog for Option<T> {
     fn log(&self) {
         match self {
             Some(x) => ok!("obtained {x:?}"),
-            None => warn!("nothing obtained")
+            None => warn!("nothing obtained"),
         };
     }
 
