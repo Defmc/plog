@@ -37,5 +37,5 @@ Due to the focus on optimization, every functionality from the lib (except log m
 - [X] Split date and time into two features
 - [X] Include logging methods to `Option` and `Result`
 - [ ] Optimize code readability
-- [ ] Include benchmarks
+- [X] Include benchmarks
 - [ ] Create documentation
