@@ -26,12 +26,13 @@ fn main() {
 Due to the focus on optimization, every functionality from the lib (except log macros) is offered by features. Plog contains the following features:
 | feature | description | additional dependence | why |
 | ------- | ----------- | --------------------- | --- |
-| `datetime` | Include date and time on the log, formatted as `%Y-%M-%D %HH:%MM:%SS` | `chrono` | To format system time |
+| `date` | Include date on the log, formatted as `%Y-%M-%D` | `chrono` | To format system date |
+| `time` | Similar to `date`, but logs the time with `%H:%M:%S` | `chrono` | To format system time |
 | `persistent` | Add a persistent log handled by `LOG_FILEPATH` environment variable, saving each log on the pointed file | `parking_lot` | `const_mutex` for stable Rust and optimizations |
 | `context`| Include the line and file that has required the log | none except `std::line!` and `std::file!` | To get information about in compile-time |
 
 ## plans
-- [ ] Split date and time into two features
+- [X] Split date and time into two features
 - [ ] Include logging methods to `Option` and `Result`
 - [ ] Optimize code readability
 - [ ] Include benchmarks
