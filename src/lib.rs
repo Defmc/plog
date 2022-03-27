@@ -12,7 +12,7 @@ use std::io;
 pub mod persistent;
 
 #[cfg(feature = "impls")]
-mod impls {
+pub mod impls {
     pub mod option_log;
     pub use option_log::*;
     pub mod result_log;
