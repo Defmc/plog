@@ -4,10 +4,18 @@ pub const ERROR_LOG: &str = "Can't log to stderr";
 // Impossible to use `&mut str`.
 // Function `String::push_str` is needed when `datetime` feature is enabled
 pub fn datetime(_input: &mut String) {
-    #[cfg(feature = "datetime")]
+    #[cfg(any(feature = "date", feature = "time"))]
     {
         use chrono::Local;
-        let datetime = Local::now().format(" on %Y-%m-%d %H:%M:%S");
+
+        let formatter = match (cfg!(feature = "date"), cfg!(feature = "time")) {
+            (true, true) => " on %Y-%m-%d %H:%M:%S",
+            (true, false) => " on %Y-%m-%d",
+            (false, true) => " on %H:%M:%S",
+            (_, _) => "",
+        };
+
+        let datetime = Local::now().format(formatter);
         _input.push_str(&datetime.to_string());
     }
 }
