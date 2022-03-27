@@ -9,6 +9,15 @@ use std::io;
 #[cfg(feature = "persistent")]
 pub mod persistent;
 
+#[cfg(feature = "impls")]
+mod impls {
+    pub mod option_log;
+    pub use option_log::*;
+    pub mod result_log;
+    pub use result_log::*;
+}
+
+
 #[cfg(test)]
 pub mod test;
 

@@ -1,10 +1,11 @@
 use crate::{self as plog, error, info, ok, warn};
+use crate::impls::*;
 use std::thread;
 
 #[test]
 fn multithread() {
     info!("Application started");
-    let thrds: Vec<_> = (0..=1000)
+    let thrds: Vec<_> = (0..=10)
         .map(|x| {
             thread::spawn(move || {
                 ok!("{x}th thread initialized");
@@ -25,4 +26,14 @@ fn pretty_out() {
     info!("it's started to work {n}");
     warn!("wait, is it really working {n}?");
     error!("OHHHH NOOOO");
+}
+
+#[test]
+fn result() {
+    let n: Result<u8, ()> = Ok(2);
+    let m: Result<u8, ()> = Err(());
+    let exec = |f: fn(&Result<u8, ()>)| { f(&n); f(&m); };
+    exec(ResultLog::log);
+    exec(ShowOk::show_ok);
+    exec(ShowErr::show_err);
 }
