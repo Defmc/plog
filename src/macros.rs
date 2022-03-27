@@ -20,14 +20,20 @@ pub fn datetime(_input: &mut String) {
     }
 }
 
+#[cfg(feature = "context")]
 #[macro_export]
 macro_rules! context {
-    ($input:tt) => {
-        #[cfg(feature = "context")]
-        {
-            $input.push_str(&format!(" at {}:{}", file!(), line!()))
-        }
-    };
+    ($input:tt) => {{
+        $input.push_str(&format!(" at {}:{}", file!(), line!()))
+    }}
+}
+
+#[cfg(not(feature = "context"))]
+#[macro_export]
+macro_rules! context {
+    ($input:tt) => {{
+        $input.push_str(&format!(" at {}:{}", file!(), line!()))
+    }}
 }
 
 #[macro_export]

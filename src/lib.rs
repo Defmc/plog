@@ -41,13 +41,13 @@ pub fn log<T: AsRef<str>>(
     Ok(())
 }
 
+#[cfg(feature = "colored")]
 fn print_log<T: AsRef<str>>(
     #[cfg(feature = "colored")] color: Color,
     prefix: &str,
     msg: &T,
 ) -> io::Result<()> {
-    #[cfg(feature = "colored")]
-    return execute!(
+    execute!(
         io::stderr().lock(),
         Print("["),
         SetAttribute(Attribute::Bold),
@@ -57,11 +57,11 @@ fn print_log<T: AsRef<str>>(
         Print("]: "),
         Print(msg.as_ref()),
         Print('\n')
-    );
+    )
+}
 
-    #[cfg(not(feature = "colored"))]
-    {
-        use std::io::Write;
-        writeln!(io::stderr().lock(), "[ {prefix} ]: {}", msg.as_ref()).map(|_| ())
-    }
+#[cfg(not(feature = "colored"))]
+fn print_log<T: AsRef<str>>(prefix: &str, msg: T) -> io::Result<()> {
+    use std::io::Write;
+    writeln!(io::stderr().lock(), "[{prefix}]: {}", msg.as_ref()).map(|_| ())
 }
