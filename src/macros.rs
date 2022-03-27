@@ -7,7 +7,7 @@ pub fn datetime(_input: &mut String) {
     #[cfg(feature = "datetime")]
     {
         use chrono::Local;
-        let datetime = Local::now().format(" %Y-%m-%d %H:%M:%S");
+        let datetime = Local::now().format(" on %Y-%m-%d %H:%M:%S");
         _input.push_str(&datetime.to_string());
     }
 }
@@ -15,7 +15,9 @@ pub fn datetime(_input: &mut String) {
 #[macro_export]
 macro_rules! context {
     ($input:tt) => {
-        $input.push_str(&format!(" at {}:{}", file!(), line!()))
+        #[cfg(feature = "context")] {
+            $input.push_str(&format!(" at {}:{}", file!(), line!()))
+        }
     };
 }
 

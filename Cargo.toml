@@ -6,7 +6,7 @@ repository = "https://github.com/Defmc/plog"
 description = "A pretty logger written for Rust programs "
 license = "MIT"
 keywords = ["log"]
-categories = ["development-tools", "logger", "cli"]
+categories = ["development-tools", "accessibility", "command-line-utilities", "config"]
 
 [dependencies]
 crossterm = "0.23.1"
