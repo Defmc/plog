@@ -32,41 +32,41 @@ macro_rules! context {
 
 #[macro_export]
 macro_rules! core_log {
-    ($color:tt, $prefix:tt, $($args:tt)+) => {
-        let mut prefix = $prefix.into();
+    ($color:tt, $prefix:tt, $($args:tt)+) => {{
+        let mut prefix = String::from($prefix);
         plog::macros::datetime(&mut prefix);
         plog::context!(prefix);
         plog::log(crossterm::style::Color::$color, &prefix, format!($($args)+))
             .expect(plog::macros::ERROR_LOG)
-    }
+    }}
 }
 
 #[macro_export]
 macro_rules! debug {
-    ($($args:tt)+) => {
+    ($($args:tt)+) => {{
         plog::core_log!(Grey, "DEBG", $($args)+)
-    }
+    }}
 }
 
 #[macro_export]
 macro_rules! info {
-    ($($args:tt)+) => {
+    ($($args:tt)+) => {{
         plog::core_log!(White, "INFO", $($args)+)
-    }
+    }}
 }
 
 #[macro_export]
 macro_rules! warn {
-    ($($args:tt)+) => {
+    ($($args:tt)+) => {{
         plog::core_log!(Yellow, "WARN", $($args)+)
-    }
+    }}
 }
 
 #[macro_export]
 macro_rules! error {
-    ($($args:tt)+) => {
+    ($($args:tt)+) => {{
         plog::core_log!(Red, "ERRO", $($args)+)
-    }
+    }}
 }
 
 #[macro_export]
