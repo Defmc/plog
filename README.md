@@ -29,7 +29,8 @@ Due to the focus on optimization, every functionality from the lib (except log m
 | `date` | Include date on the log, formatted as `%Y-%M-%D` | `chrono` | To format system date |
 | `time` | Similar to `date`, but logs the time with `%H:%M:%S` | `chrono` | To format system time |
 | `persistent` | Add a persistent log handled by `LOG_FILEPATH` environment variable, saving each log on the pointed file | `parking_lot` | `const_mutex` for stable Rust and optimizations |
-| `context`| Include the line and file that has required the log | none except `std::line!` and `std::file!` | To get information about in compile-time |
+| `context`| Include the line and file that has required the log | none | |
+| `impls` | Implements `log` and `show_<variant\>` for `Option<T\>` and `Result<T, U\>`| none | |
 
 ## plans
 - [X] Split date and time into two features
