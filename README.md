@@ -31,8 +31,8 @@ Due to the focus on optimization, every functionality from the lib (except log m
 | `context`| Include the line and file that has required the log | none except `std::line!` and `std::file!` | To get information about in compile-time |
 
 ## plans
-- [] Split date and time into two features
-- [] Include logging methods to `Option` and `Result`
-- [] Optimize code readability
-- [] Include benchmarks
-- [] Create documentation
+- [ ] Split date and time into two features
+- [ ] Include logging methods to `Option` and `Result`
+- [ ] Optimize code readability
+- [ ] Include benchmarks
+- [ ] Create documentation
