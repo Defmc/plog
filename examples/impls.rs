@@ -1,16 +1,17 @@
 use std::fmt::Debug;
 
 fn main() {
-    #[cfg(feature = "impls")] {
+    #[cfg(feature = "impls")]
+    {
         use plog::impls::*;
-    const LOREM: &str = "Lorem ipsum";
-    const EMPTY_OPT: Option<&str> = None;
-    const FILLD_OPT: Option<&str> = Some(LOREM);
-    const EMPTY_RES: Result<&str, ()> = Ok(LOREM);
-    const FILLD_RES: Result<&str, ()> = Err(());
+        const LOREM: &str = "Lorem ipsum";
+        const EMPTY_OPT: Option<&str> = None;
+        const FILLD_OPT: Option<&str> = Some(LOREM);
+        const EMPTY_RES: Result<&str, ()> = Ok(LOREM);
+        const FILLD_RES: Result<&str, ()> = Err(());
 
-    test(&EMPTY_OPT, &EMPTY_RES);
-    test(&FILLD_OPT, &FILLD_RES);
+        test(&EMPTY_OPT, &EMPTY_RES);
+        test(&FILLD_OPT, &FILLD_RES);
     }
 }
 
