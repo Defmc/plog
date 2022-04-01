@@ -1,41 +1,32 @@
 use crate::{self as plog, error, ok};
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
-pub trait ResultLog {
-    fn log(self) -> Self;
+pub trait ResultLog<T> {
+    fn log(self, _: T) -> Self;
+    fn show_ok(self, _: T) -> Self;
+    fn show_err(self, _: T) -> Self;
 }
 
-pub trait ShowOk {
-    fn show_ok(self) -> Self;
-}
-
-pub trait ShowErr {
-    fn show_err(self) -> Self;
-}
-
-impl<T: Debug, U: Debug> ResultLog for Result<T, U> {
-    fn log(self) -> Self {
+impl<T, U, N> ResultLog<N> for Result<T, U> where
+    T: Debug, U: Debug, N: Display {
+    fn log(self, name: N) -> Self {
         match self {
-            Ok(ref val) => ok!("obtained {val:?}"),
-            Err(ref err) => error!("obtained {err:?}"),
+            Ok(ref val) => ok!("{name} returned {val:?}"),
+            Err(ref err) => error!("{name} was failed with {err:?}"),
         }
         self
     }
-}
 
-impl<T, U: Debug> ShowErr for Result<T, U> {
-    fn show_err(self) -> Self {
+    fn show_err(self, name: N) -> Self {
         if let Err(ref err) = self {
-            error!("contains {err:?}");
+            error!("{name} was failed with {err:?}");
         }
         self
     }
-}
 
-impl<T: Debug, U> ShowOk for Result<T, U> {
-    fn show_ok(self) -> Self {
+    fn show_ok(self, name: N) -> Self {
         if let Ok(ref val) = self {
-            ok!("contains {val:?}");
+            ok!("{name} was failed with {val:?}");
         }
         self
     }

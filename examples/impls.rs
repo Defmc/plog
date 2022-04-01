@@ -14,6 +14,6 @@ fn main() {
 
 #[allow(unused_must_use)]
 fn test(opt: &Option<impl Debug>, res: &Result<impl Debug, impl Debug>) {
-    opt.as_ref().log();
-    res.as_ref().log();
+    opt.as_ref().log("opt");
+    res.as_ref().log("res");
 }
