@@ -39,3 +39,4 @@ Due to the focus on optimization, every functionality from the lib (except log m
 - [ ] Optimize code readability
 - [X] Include benchmarks
 - [ ] Create documentation
+- [ ] Custom panic handler

@@ -7,8 +7,12 @@ pub trait ResultLog<T> {
     fn show_err(self, _: T) -> Self;
 }
 
-impl<T, U, N> ResultLog<N> for Result<T, U> where
-    T: Debug, U: Debug, N: Display {
+impl<T, U, N> ResultLog<N> for Result<T, U>
+where
+    T: Debug,
+    U: Debug,
+    N: Display,
+{
     fn log(self, name: N) -> Self {
         match self {
             Ok(ref val) => ok!("{name} returned {val:?}"),

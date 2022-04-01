@@ -11,6 +11,6 @@ fn main() {
             })
         })
         .collect();
-        
+
     threads.into_iter().for_each(|thr| thr.join().unwrap());
 }
