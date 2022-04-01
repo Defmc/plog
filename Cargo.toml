@@ -1,11 +1,11 @@
 [package]
 name = "plog"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2021"
 repository = "https://github.com/Defmc/plog"
 description = "A pretty logger written for Rust programs "
 license = "MIT"
-keywords = ["log"]
+keywords = ["log", "testing", "text", "utility"]
 categories = ["development-tools", "accessibility", "command-line-utilities", "config"]
 
 [dependencies]
