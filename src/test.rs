@@ -35,8 +35,8 @@ fn result() {
         let n: Result<u8, ()> = Ok(2);
         let m: Result<u8, ()> = Err(());
         let exec = |f: fn(&Result<u8, ()>)| {
-            f(&n);
-            f(&m);
+            f("n", &n);
+            f("m", &m);
         };
         exec(ResultLog::log);
         exec(ShowOk::show_ok);
