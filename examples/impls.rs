@@ -1,7 +1,8 @@
-use plog::impls::*;
 use std::fmt::Debug;
 
 fn main() {
+    #[cfg(feature = "impls")] {
+        use plog::impls::*;
     const LOREM: &str = "Lorem ipsum";
     const EMPTY_OPT: Option<&str> = None;
     const FILLD_OPT: Option<&str> = Some(LOREM);
@@ -10,9 +11,11 @@ fn main() {
 
     test(&EMPTY_OPT, &EMPTY_RES);
     test(&FILLD_OPT, &FILLD_RES);
+    }
 }
 
 #[allow(unused_must_use)]
+#[cfg(feature = "impls")]
 fn test(opt: &Option<impl Debug>, res: &Result<impl Debug, impl Debug>) {
     opt.as_ref().log("opt");
     res.as_ref().log("res");
