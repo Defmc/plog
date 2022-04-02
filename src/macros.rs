@@ -1,5 +1,13 @@
+//! Core of the library.
+//! Contains the front-end to `plog::log`, formating arguments
+//! and applying features defined at compile-time
+
+/// The default `expect` message for `plog::log!`
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
+/// Date and time formatter using `chrono` library, only applied with `date` or `time` features
+/// `date` is formated by year, month and day
+/// `time` is formated by hour, minute and second
 #[allow(clippy::ptr_arg)]
 // Impossible to use `&mut str`.
 // Function `String::push_str` is needed when `datetime` feature is enabled
@@ -12,7 +20,7 @@ pub fn datetime(_input: &mut String) {
             (true, true) => " on %Y-%m-%d %H:%M:%S",
             (true, false) => " on %Y-%m-%d",
             (false, true) => " on %H:%M:%S",
-            (_, _) => "",
+            (_, _) => unreachable!(),
         };
 
         let datetime = Local::now().format(formatter);
@@ -20,6 +28,13 @@ pub fn datetime(_input: &mut String) {
     }
 }
 
+/// Context formatter, includes the line and file where the macro was called
+/// Just enabled with `context` feature
+/// ```rust
+/// let mut log = "hi".into();
+/// plog::context!(log);
+/// assert_eq!(log, "hi at src/main.rs:3");
+/// ```
 #[cfg(feature = "context")]
 #[macro_export]
 macro_rules! context {
@@ -28,12 +43,26 @@ macro_rules! context {
     };
 }
 
+/// Context formatter, includes the line and file where the macro was called
+/// Just enabled with `context` feature
+/// ```rust
+/// let mut log = "hi".into();
+/// plog::context!(log);
+/// assert_eq!(log, "hi at src/main.rs:3");
+/// ```
 #[cfg(not(feature = "context"))]
 #[macro_export]
 macro_rules! context {
     ($input:tt) => {};
 }
 
+/// Log formatter, apply every formating feature enabled:
+/// ```rust
+/// plog::log!(White, "....", "I'm a four-dots complement");
+/// ```
+/// # Panic
+/// When it's impossible to write on STDERR.
+/// Write to a file also can panic, but it just can happen with `persistent` feature enabled
 #[macro_export]
 macro_rules! log {
     ($color:tt, $prefix:tt, $($args:tt)+) => {{
@@ -44,6 +73,11 @@ macro_rules! log {
     }}
 }
 
+/// Log caller, calls the `log` function and format string using the `std::format` macro
+/// Just enable colored terminal output with `colored` feature
+/// ```rust
+/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement")
+/// ```
 #[cfg(feature = "colored")]
 #[macro_export]
 macro_rules! core_log {
@@ -52,6 +86,11 @@ macro_rules! core_log {
     }
 }
 
+/// Log caller, calls the `log` function and format string using the `std::format` macro
+/// Just enable colored terminal output with `colored` feature
+/// ```rust
+/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement")
+/// ```
 #[cfg(not(feature = "colored"))]
 #[macro_export]
 macro_rules! core_log {
@@ -60,6 +99,11 @@ macro_rules! core_log {
     }
 }
 
+/// A debugging logger, just will compile the log message when `debug_assert` is enabled
+/// ```rust
+/// let x = 5;
+/// plog::debug!("x = {x}");
+/// ```
 #[macro_export]
 macro_rules! debug {
     ($($args:tt)+) => {{
@@ -67,6 +111,10 @@ macro_rules! debug {
     }}
 }
 
+/// An info logger, the lowest importancy level
+/// ```rust
+/// plog::info!("program initialized");
+/// ```
 #[macro_export]
 macro_rules! info {
     ($($args:tt)+) => {{
@@ -74,6 +122,14 @@ macro_rules! info {
     }}
 }
 
+/// A warn logger, for things that don't affect the program flow
+/// ```rust
+/// use std::env;
+///
+/// if env::var("LOG_FILEPATH").is_none() {
+///     plog::warn!("LOG_FILEPATH is disabled")
+/// }
+/// ```
 #[macro_export]
 macro_rules! warn {
     ($($args:tt)+) => {{
@@ -81,6 +137,12 @@ macro_rules! warn {
     }}
 }
 
+/// An error logger, the highest importancy level, for things that will affect the program use
+/// ```rust
+/// if 1 + 1 != 2 {
+///     plog::error!("wait wait wait")
+/// }
+/// ```
 #[macro_export]
 macro_rules! error {
     ($($args:tt)+) => {{
@@ -88,6 +150,12 @@ macro_rules! error {
     }}
 }
 
+/// Success logger, for things that is working. The "release version" of `plog::debug!`
+/// Also works on `debug_assert`
+/// ```rust
+/// let x = 5;
+/// plog::ok!("x was initialized as {x}");
+/// ```
 #[macro_export]
 macro_rules! ok {
     ($($args:tt)+) => {
