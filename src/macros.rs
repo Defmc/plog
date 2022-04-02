@@ -6,7 +6,7 @@
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
 #[cfg(feature = "colored")]
-pub mod Colors {
+pub mod colors {
     use crossterm::style::Color;
     pub const GREEN: Color = Color::Green;
     pub const WHITE: Color = Color::White;
@@ -43,7 +43,7 @@ pub fn datetime(_input: &mut String) {
 /// ```rust
 /// let mut log = String::from("hi");
 /// plog::context!(log);
-/// assert_eq!(log, "hi at src/main.rs:3");
+/// assert_eq!(log, "hi at src/macros.rs:5");
 /// ```
 #[cfg(feature = "context")]
 #[macro_export]
@@ -71,7 +71,7 @@ macro_rules! context {
 
 /// Log formatter, apply every formating feature enabled:
 /// ```rust
-/// plog::log!(White, "....", "I'm a four-dots complement");
+/// plog::log!(WHITE, "....", "I'm a four-dots complement");
 /// ```
 /// # Panic
 /// When it's impossible to write on STDERR.
@@ -89,20 +89,20 @@ macro_rules! log {
 /// Log caller, calls the `log` function and format string using the `std::format` macro
 /// Just enable colored terminal output with `colored` feature
 /// ```rust
-/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
+/// plog::core_log!(WHITE, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
 /// ```
 #[cfg(feature = "colored")]
 #[macro_export]
 macro_rules! core_log {
     ($color:tt, $prefix:expr, $($args:tt)+) => {
-        plog::log(plog::macros::Colors::$color, $prefix, format!($($args)+))
+        plog::log(plog::macros::colors::$color, $prefix, format!($($args)+))
     }
 }
 
 /// Log caller, calls the `log` function and format string using the `std::format` macro
 /// Just enable colored terminal output with `colored` feature
 /// ```rust
-/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
+/// plog::core_log!(WHITE, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
 /// ```
 #[cfg(not(feature = "colored"))]
 #[macro_export]
@@ -120,7 +120,9 @@ macro_rules! core_log {
 #[macro_export]
 macro_rules! debug {
     ($($args:tt)+) => {{
-        plog::log!(GREY, "DEBG", $($args)+)
+        if cfg!(debug_assertions) {
+            plog::log!(GREY, "DEBG", $($args)+)
+        }
     }}
 }
 
