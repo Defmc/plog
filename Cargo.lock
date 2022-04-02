@@ -163,7 +163,7 @@ dependencies = [
 
 [[package]]
 name = "plog"
-version = "0.2.5"
+version = "0.2.7"
 dependencies = [
  "bencher",
  "chrono",

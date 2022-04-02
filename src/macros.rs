@@ -5,6 +5,16 @@
 /// The default `expect` message for `plog::log!`
 pub const ERROR_LOG: &str = "Can't log to stderr";
 
+#[cfg(feature = "colored")]
+pub mod Colors {
+    use crossterm::style::Color;
+    pub const GREEN: Color = Color::Green;
+    pub const WHITE: Color = Color::White;
+    pub const RED: Color = Color::Red;
+    pub const YELLOW: Color = Color::Yellow;
+    pub const GREY: Color = Color::Grey;
+}
+
 /// Date and time formatter using `chrono` library, only applied with `date` or `time` features
 /// `date` is formated by year, month and day
 /// `time` is formated by hour, minute and second
@@ -85,7 +95,7 @@ macro_rules! log {
 #[macro_export]
 macro_rules! core_log {
     ($color:tt, $prefix:expr, $($args:tt)+) => {
-        plog::log(crossterm::style::Color::$color, $prefix, format!($($args)+))
+        plog::log(plog::macros::Colors::$color, $prefix, format!($($args)+))
     }
 }
 
@@ -110,7 +120,7 @@ macro_rules! core_log {
 #[macro_export]
 macro_rules! debug {
     ($($args:tt)+) => {{
-        plog::log!(Grey, "DEBG", $($args)+)
+        plog::log!(GREY, "DEBG", $($args)+)
     }}
 }
 
@@ -121,7 +131,7 @@ macro_rules! debug {
 #[macro_export]
 macro_rules! info {
     ($($args:tt)+) => {{
-        plog::log!(White, "INFO", $($args)+)
+        plog::log!(WHITE, "INFO", $($args)+)
     }}
 }
 
@@ -136,7 +146,7 @@ macro_rules! info {
 #[macro_export]
 macro_rules! warn {
     ($($args:tt)+) => {{
-        plog::log!(Yellow, "WARN", $($args)+)
+        plog::log!(YELLOW, "WARN", $($args)+)
     }}
 }
 
@@ -149,7 +159,7 @@ macro_rules! warn {
 #[macro_export]
 macro_rules! error {
     ($($args:tt)+) => {{
-        plog::log!(Red, "ERRO", $($args)+)
+        plog::log!(RED, "ERRO", $($args)+)
     }}
 }
 
@@ -162,6 +172,6 @@ macro_rules! error {
 #[macro_export]
 macro_rules! ok {
     ($($args:tt)+) => {
-        plog::log!(Green, "OKAY", $($args)+)
+        plog::log!(GREEN, "OKAY", $($args)+)
     }
 }
