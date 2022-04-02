@@ -26,6 +26,7 @@
 pub mod macros;
 use std::io;
 
+#[allow(unused_imports)]
 #[cfg(feature = "colored")]
 use crossterm::{
     execute,
@@ -51,26 +52,29 @@ pub mod test;
 /// `persistent` enable write to a file
 /// `colored` enable colored output to terminal
 pub fn log<T: AsRef<str>>(
-    #[cfg(feature = "colored")] color: Color,
-    prefix: &str,
-    msg: T,
+    #[cfg(feature = "colored")] _color: Color,
+    _prefix: &str,
+    _msg: T,
 ) -> io::Result<()> {
+    // Hide every message on tests
+    #[cfg(not(test))]
     print_log(
         #[cfg(feature = "colored")]
-        color,
-        prefix,
-        &msg,
+        _color,
+        _prefix,
+        &_msg,
     )?;
 
     #[cfg(feature = "persistent")]
     if persistent::check_env() {
-        persistent::write_log(prefix, &msg)?;
+        persistent::write_log(_prefix, &_msg)?;
     }
     Ok(())
 }
 
 /// Prints log to STDERR
 /// `colored` enable colored output to terminal
+#[cfg(not(test))]
 #[cfg(feature = "colored")]
 fn print_log<T: AsRef<str>>(
     #[cfg(feature = "colored")] color: Color,
@@ -90,6 +94,7 @@ fn print_log<T: AsRef<str>>(
     )
 }
 
+#[cfg(not(test))]
 #[cfg(not(feature = "colored"))]
 fn print_log<T: AsRef<str>>(prefix: &str, msg: T) -> io::Result<()> {
     use std::io::Write;

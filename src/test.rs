@@ -1,3 +1,5 @@
+#[cfg(feature = "impls")]
+use crate::impls::*;
 use crate::{self as plog, error, info, ok, warn};
 use std::thread;
 
@@ -27,19 +29,33 @@ fn pretty_out() {
     error!("OHHHH NOOOO");
 }
 
+#[cfg(feature = "impls")]
 #[test]
 fn result() {
-    #[cfg(feature = "impls")]
-    {
-        use crate::impls::*;
-        let n: Result<u8, ()> = Ok(2);
-        let m: Result<u8, ()> = Err(());
-        let exec = |f: fn(&Result<u8, ()>)| {
-            f("n", &n);
-            f("m", &m);
-        };
-        exec(ResultLog::log);
-        exec(ShowOk::show_ok);
-        exec(ShowErr::show_err);
-    }
+    #[allow(unused_must_use)]
+    let exec = |name: &str, item: &Result<u8, ()>| {
+        item.log(name);
+        item.show_ok(name);
+        item.show_err(name);
+    };
+
+    let n: Result<u8, ()> = Ok(2);
+    let m: Result<u8, ()> = Err(());
+    exec("n", &n);
+    exec("m", &m);
+}
+
+#[cfg(feature = "impls")]
+#[test]
+fn option() {
+    let exec = |name: &str, item: &Option<u8>| {
+        item.log(name);
+        item.show_some(name);
+        item.show_none(name);
+    };
+
+    let n: Option<u8> = Some(2);
+    let m: Option<u8> = None;
+    exec("n", &n);
+    exec("m", &m);
 }
