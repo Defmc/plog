@@ -31,7 +31,7 @@ pub fn datetime(_input: &mut String) {
 /// Context formatter, includes the line and file where the macro was called
 /// Just enabled with `context` feature
 /// ```rust
-/// let mut log = "hi".into();
+/// let mut log = String::from("hi");
 /// plog::context!(log);
 /// assert_eq!(log, "hi at src/main.rs:3");
 /// ```
@@ -46,9 +46,12 @@ macro_rules! context {
 /// Context formatter, includes the line and file where the macro was called
 /// Just enabled with `context` feature
 /// ```rust
-/// let mut log = "hi".into();
+/// let mut log = String::from("hi");
 /// plog::context!(log);
-/// assert_eq!(log, "hi at src/main.rs:3");
+/// #[cfg(feature = "context")]
+/// assert_eq!(log, "hi at src/main.rs:2");
+/// #[cfg(not(feature = "context"))]
+/// assert_eq!(log, "hi");
 /// ```
 #[cfg(not(feature = "context"))]
 #[macro_export]
@@ -76,7 +79,7 @@ macro_rules! log {
 /// Log caller, calls the `log` function and format string using the `std::format` macro
 /// Just enable colored terminal output with `colored` feature
 /// ```rust
-/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement")
+/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
 /// ```
 #[cfg(feature = "colored")]
 #[macro_export]
@@ -89,7 +92,7 @@ macro_rules! core_log {
 /// Log caller, calls the `log` function and format string using the `std::format` macro
 /// Just enable colored terminal output with `colored` feature
 /// ```rust
-/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement")
+/// plog::core_log!(White, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
 /// ```
 #[cfg(not(feature = "colored"))]
 #[macro_export]
@@ -126,7 +129,7 @@ macro_rules! info {
 /// ```rust
 /// use std::env;
 ///
-/// if env::var("LOG_FILEPATH").is_none() {
+/// if env::var("LOG_FILEPATH").is_err() {
 ///     plog::warn!("LOG_FILEPATH is disabled")
 /// }
 /// ```
