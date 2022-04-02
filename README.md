@@ -38,5 +38,4 @@ Due to the focus on optimization, every functionality from the lib (except log m
 - [X] Include logging methods to `Option` and `Result`
 - [ ] Optimize code readability
 - [X] Include benchmarks
-- [ ] Create documentation
-- [ ] Custom panic handler
+- [X] Create documentation
