@@ -35,11 +35,17 @@ where
     /// opt_none.log("none"); // Logs "[WARN]: none is empty"
     /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
     /// ```
+    #[cfg(feature = "impls")]
     fn log(self, name: N) -> Self {
         match self {
             Ok(ref val) => ok!("{name} returned {val:?}"),
             Err(ref err) => error!("{name} was failed with {err:?}"),
         }
+        self
+    }
+
+    #[cfg(not(feature = "impls"))]
+    fn log(self, _name: N) -> Self {
         self
     }
 
@@ -50,10 +56,16 @@ where
     /// let opt_none: Option<&str> = None;
     /// opt_none.log("none"); // Logs "[WARN]: none is empty"
     /// ```
+    #[cfg(feature = "impls")]
     fn show_err(self, name: N) -> Self {
         if let Err(ref err) = self {
             error!("{name} was failed with {err:?}");
         }
+        self
+    }
+
+    #[cfg(not(feature = "impls"))]
+    fn show_err(self, _name: N) -> Self {
         self
     }
 
@@ -64,10 +76,16 @@ where
     /// let opt_hello = Some("Hello world");
     /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
     /// ```
+    #[cfg(feature = "impls")]
     fn show_ok(self, name: N) -> Self {
         if let Ok(ref val) = self {
             ok!("{name} was failed with {val:?}");
         }
+        self
+    }
+
+    #[cfg(not(feature = "impls"))]
+    fn show_ok(self, _name: N) -> Self {
         self
     }
 }

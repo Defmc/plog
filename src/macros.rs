@@ -53,16 +53,6 @@ macro_rules! context {
     };
 }
 
-/// Context formatter, includes the line and file where the macro was called
-/// Just enabled with `context` feature
-/// ```rust
-/// let mut log = String::from("hi");
-/// plog::context!(log);
-/// #[cfg(feature = "context")]
-/// assert_eq!(log, "hi at src/main.rs:2");
-/// #[cfg(not(feature = "context"))]
-/// assert_eq!(log, "hi");
-/// ```
 #[cfg(not(feature = "context"))]
 #[macro_export]
 macro_rules! context {
@@ -99,11 +89,6 @@ macro_rules! core_log {
     }
 }
 
-/// Log caller, calls the `log` function and format string using the `std::format` macro
-/// Just enable colored terminal output with `colored` feature
-/// ```rust
-/// plog::core_log!(WHITE, ".... at src/main.rs:2", "I'm a four-dots complement").unwrap()
-/// ```
 #[cfg(not(feature = "colored"))]
 #[macro_export]
 macro_rules! core_log {

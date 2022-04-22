@@ -31,11 +31,17 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// opt_none.log("none"); // Logs "[WARN]: none is empty"
     /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
     /// ```
+    #[cfg(feature = "impls")]
     fn log(self, name: U) -> Self {
         match self {
             Some(ref x) => ok!("{name} has {x:?}"),
             None => warn!("{name} is empty"),
         };
+        self
+    }
+
+    #[cfg(not(feature = "impls"))]
+    fn log(self, _name: U) -> Self {
         self
     }
 
@@ -46,10 +52,15 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// let opt_none: Option<&str> = None;
     /// opt_none.log("none"); // Logs "[WARN]: none is empty"
     /// ```
+    #[cfg(feature = "impls")]
     fn show_none(self, name: U) -> Self {
         if let None = self {
             info!("{name} is empty");
         }
+        self
+    }
+    #[cfg(not(feature = "impls"))]
+    fn show_none(self, _name: U) -> Self {
         self
     }
 
@@ -60,10 +71,16 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// let opt_hello = Some("Hello world");
     /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
     /// ```
+    #[cfg(feature = "impls")]
     fn show_some(self, name: U) -> Self {
         if let Some(ref x) = self {
             info!("{name} has {x:?}");
         }
+        self
+    }
+
+    #[cfg(not(feature = "impls"))]
+    fn show_some(self, _name: U) -> Self {
         self
     }
 }

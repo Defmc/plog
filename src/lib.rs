@@ -36,7 +36,6 @@ use crossterm::{
 #[cfg(feature = "persistent")]
 pub mod persistent;
 
-#[cfg(feature = "impls")]
 pub mod impls {
     pub mod option_log;
     pub use option_log::*;
