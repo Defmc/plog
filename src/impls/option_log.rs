@@ -28,8 +28,8 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     ///
     /// let opt_none: Option<&str> = None;
     /// let opt_hello = Some("Hello world");
-    /// opt_none.log("none"); // Logs "[WARN]: none is empty"
-    /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
+    /// opt_none.log("opt_none"); // Logs "[WARN]: opt_none is empty"
+    /// opt_some.log("opt_some"); // Logs "[OKAY]: opt_some has "Hello world""
     /// ```
     fn log(self, _name: U) -> Self {
         #[cfg(feature = "impls")]
@@ -45,7 +45,7 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// use plog::impls::*;
     ///
     /// let opt_none: Option<&str> = None;
-    /// opt_none.log("none"); // Logs "[WARN]: none is empty"
+    /// opt_none.log("opt_none"); // Logs "[WARN]: opt_none is empty"
     /// ```
     fn show_none(self, _name: U) -> Self {
         #[cfg(feature = "impls")]
@@ -57,10 +57,10 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
 
     /// Like `OptionLog::log`, but just shows for `Option::Some`
     /// ```rust
-    /// use plog::impls::*;
+    /// use plog::impls::OptionLog;
     ///
-    /// let opt_hello = Some("Hello world");
-    /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
+    /// let opt_some = Some("Hello world");
+    /// opt_some.log("opt_some"); // Logs "[OKAY]: opt_some has "Hello world""
     /// ```
     fn show_some(self, _name: U) -> Self {
         #[cfg(feature = "impls")]
