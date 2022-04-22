@@ -8,14 +8,14 @@ use std::fmt::{Debug, Display};
 
 /// Methods to work with. Where `log = show_ok + show_err`
 pub trait ResultLog<T> {
-    /// show the content of a `Option` in a `plog::ok!` log or
-    /// a "{name} is empty" message in `plog::warn!` when it's None
+    /// Show the content of a `Result` in a `plog::ok!` log or
+    /// a "{name} was failed with " message in `plog::error!` when it's `Result::Err`
     fn log(self, _: T) -> Self;
 
-    /// just show when `Option::is_none` return true
+    /// Just shows when `Result::is_ok` returns true
     fn show_ok(self, _: T) -> Self;
 
-    /// just show when `Option::is_some` returns true
+    /// Just shows when `Result::is_err` returns true
     fn show_err(self, _: T) -> Self;
 }
 
@@ -25,67 +25,56 @@ where
     U: Debug,
     N: Display,
 {
-    /// Default implementation. Shows "{name} has {item:?}" for `Option::Some`
-    /// and "{name} is empty" for `Option::None`
+    /// Default implementation. Shows "{name} returned {ok:?}" for `Result::Ok`
+    /// and "{name} was failed with {err:?}" for `Result::Err`
     /// ```rust
-    /// use plog::impls::*;
+    /// use plog::impls::ResultLog;
+    /// type Res = Result<u8, ()>;
     ///
-    /// let opt_none: Option<&str> = None;
-    /// let opt_hello = Some("Hello world");
-    /// opt_none.log("none"); // Logs "[WARN]: none is empty"
-    /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
+    ///
+    /// let opt_err: Res = Err(());
+    /// let opt_ok: Res = Ok(0);
+    /// opt_ok.log("opt_error"); // Logs "[ERRO]: opt_error was failed with ()"
+    /// opt_err.log("opt_ok"); // Logs "[OKAY]: opt_ok succeed 0"
     /// ```
-    #[cfg(feature = "impls")]
-    fn log(self, name: N) -> Self {
+    fn log(self, _name: N) -> Self {
+        #[cfg(feature = "impls")]
         match self {
-            Ok(ref val) => ok!("{name} returned {val:?}"),
+            Ok(ref val) => ok!("{name} succeed {val:?}"),
             Err(ref err) => error!("{name} was failed with {err:?}"),
         }
         self
     }
 
-    #[cfg(not(feature = "impls"))]
-    fn log(self, _name: N) -> Self {
-        self
-    }
-
-    /// Like `OptionLog::log`, but just works for `Option::None`
+    /// Like `ResultLog::log`, but just shows for `Option::None`
     /// ```rust
-    /// use plog::impls::*;
+    /// use plog::impls::ResultLog;
+    /// type Res = Result<u8, ()>;
     ///
-    /// let opt_none: Option<&str> = None;
-    /// opt_none.log("none"); // Logs "[WARN]: none is empty"
+    /// let opt_err: Res = Err(());
+    /// opt_err.log("opt_err"); // Logs "[ERRO]: opt_err was failed with ()"
     /// ```
-    #[cfg(feature = "impls")]
-    fn show_err(self, name: N) -> Self {
+    fn show_err(self, _name: N) -> Self {
+        #[cfg(feature = "impls")]
         if let Err(ref err) = self {
             error!("{name} was failed with {err:?}");
         }
         self
     }
 
-    #[cfg(not(feature = "impls"))]
-    fn show_err(self, _name: N) -> Self {
-        self
-    }
-
-    /// Like `OptionLog::log`, but just works for `Option::Some`
+    /// Like `ResultLog::log`, but just shows for `Option::Some`
     /// ```rust
-    /// use plog::impls::*;
+    /// use plog::impls::ResultLog;
+    /// type Res = Result<u8, ()>;
     ///
-    /// let opt_hello = Some("Hello world");
-    /// opt_hello.log("hello"); // Logs "[OKAY]: hello has "Hello world""
+    /// let opt_ok = OK(0);
+    /// opt_ok.log("opt_ok"); // Logs "[OKAY]: opt_ok succeed with "Hello world""
     /// ```
-    #[cfg(feature = "impls")]
-    fn show_ok(self, name: N) -> Self {
-        if let Ok(ref val) = self {
-            ok!("{name} was failed with {val:?}");
-        }
-        self
-    }
-
-    #[cfg(not(feature = "impls"))]
     fn show_ok(self, _name: N) -> Self {
+        #[cfg(feature = "impls")]
+        if let Ok(ref val) = self {
+            ok!("{name} succeed with {val:?}");
+        }
         self
     }
 }
