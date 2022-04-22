@@ -8,11 +8,14 @@ use tokio::time;
 async fn r#async() {
     info!("Application started");
     let jobs: Vec<_> = (0..=10)
-        .map(|x| tokio::spawn(async move {
-            ok!("{x}th thread initialized");
-            time::sleep(Duration::from_millis(250)).await;
-            ok!("{x}th thread finalized");
-        })).collect();
+        .map(|x| {
+            tokio::spawn(async move {
+                ok!("{x}th thread initialized");
+                time::sleep(Duration::from_millis(250)).await;
+                ok!("{x}th thread finalized");
+            })
+        })
+        .collect();
     for job in jobs.into_iter() {
         job.await.unwrap();
     }
