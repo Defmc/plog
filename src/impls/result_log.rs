@@ -3,6 +3,7 @@
 //! Due to adhension to method chains, every method consumes and return the ownership
 //! like `Result::map`, `Result::inspect`, etc.
 
+#[cfg(feature = "impls")]
 use crate::{self as plog, error, ok};
 use std::fmt::{Debug, Display};
 

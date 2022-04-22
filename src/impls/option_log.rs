@@ -3,8 +3,8 @@
 //! Due to adhension to method chains, every method consumes and return the ownership
 //! like `Option::map`, `Option::and_then`, etc.
 
-use crate as plog;
-use crate::{info, ok, warn};
+#[cfg(feature = "impls")]
+use crate::{self as plog, info, ok, warn};
 use std::fmt::{Debug, Display};
 
 /// Methods to work with. Where `log = show_none + show_some`
