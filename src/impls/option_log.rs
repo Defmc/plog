@@ -27,7 +27,7 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// use plog::impls::*;
     ///
     /// let opt_none: Option<&str> = None;
-    /// let opt_hello = Some("Hello world");
+    /// let opt_some = Some("Hello world");
     /// opt_none.log("opt_none"); // Logs "[WARN]: opt_none is empty"
     /// opt_some.log("opt_some"); // Logs "[OKAY]: opt_some has "Hello world""
     /// ```

@@ -40,8 +40,8 @@ where
     fn log(self, _name: N) -> Self {
         #[cfg(feature = "impls")]
         match self {
-            Ok(ref val) => ok!("{name} succeed {val:?}"),
-            Err(ref err) => error!("{name} was failed with {err:?}"),
+            Ok(ref val) => ok!("{_name} succeed {val:?}"),
+            Err(ref err) => error!("{_name} was failed with {err:?}"),
         }
         self
     }
@@ -57,7 +57,7 @@ where
     fn show_err(self, _name: N) -> Self {
         #[cfg(feature = "impls")]
         if let Err(ref err) = self {
-            error!("{name} was failed with {err:?}");
+            error!("{_name} was failed with {err:?}");
         }
         self
     }
@@ -67,13 +67,13 @@ where
     /// use plog::impls::ResultLog;
     /// type Res = Result<u8, ()>;
     ///
-    /// let opt_ok = OK(0);
+    /// let opt_ok: Res = Ok(0);
     /// opt_ok.log("opt_ok"); // Logs "[OKAY]: opt_ok succeed with "Hello world""
     /// ```
     fn show_ok(self, _name: N) -> Self {
         #[cfg(feature = "impls")]
         if let Ok(ref val) = self {
-            ok!("{name} succeed with {val:?}");
+            ok!("{_name} succeed with {val:?}");
         }
         self
     }
