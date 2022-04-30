@@ -1,4 +1,4 @@
-name: Rust
+ame: Rust
 
 on: [push, pull_request]
 
@@ -20,10 +20,10 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        toolchain: [stable, beta, nightly]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
     - uses: actions-rs/toolchain@v1
       with:
         profile: minimal
-        toolchain: ${{ matrix.toolchain }}
+        toolchain: stable
         override: true
     - uses: actions-rs/cargo@v1
     - run: cargo build --all --all-features --release -vv
@@ -54,7 +54,7 @@ jobs:
         toolchain: ${{ matrix.toolchain }}
         override: true
     - uses: actions-rs/cargo@v1
-    - run: cargo test --all-features --all
+    - run: cargo test --all --all-features
 
   clippy:
     name: Clippy
