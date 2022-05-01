@@ -1,6 +1,6 @@
 [package]
 name = "plog"
-version = "0.2.11"
+version = "0.2.12"
 edition = "2021"
 repository = "https://github.com/Defmc/plog"
 description = "A modular pretty logger written for Rust programs"
