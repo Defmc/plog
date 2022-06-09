@@ -37,7 +37,7 @@ pub fn datetime(_input: &mut String) {
 /// ```rust
 /// let mut log = String::from("hi");
 /// plog::context!(log);
-/// assert_eq!(log, "hi at src/macros.rs:5");
+/// assert_eq!(log, "hi in src/macros.rs:5");
 /// ```
 #[cfg(feature = "context")]
 #[macro_export]
