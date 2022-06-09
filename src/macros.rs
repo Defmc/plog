@@ -16,7 +16,7 @@ pub mod colors {
 }
 
 /// Date and time formatter. Temporary replacement for only a `<na>` message due to RUSTSEC-2020-0159
-/// https://rustsec.org/advisories/RUSTSEC-2020-0159
+/// <https://rustsec.org/advisories/RUSTSEC-2020-0159>
 /// `date` is formated by year, month and day
 /// `time` is formated by hour, minute and second
 #[allow(clippy::ptr_arg)]
