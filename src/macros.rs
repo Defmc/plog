@@ -15,7 +15,8 @@ pub mod colors {
     pub const GREY: Color = Color::Grey;
 }
 
-/// Date and time formatter using `chrono` library, only applied with `date` or `time` features
+/// Date and time formatter. Temporary replacement for only a `<na>` message due to RUSTSEC-2020-0159
+/// https://rustsec.org/advisories/RUSTSEC-2020-0159
 /// `date` is formated by year, month and day
 /// `time` is formated by hour, minute and second
 #[allow(clippy::ptr_arg)]
@@ -24,17 +25,10 @@ pub mod colors {
 pub fn datetime(_input: &mut String) {
     #[cfg(any(feature = "date", feature = "time"))]
     {
-        use chrono::Local;
-
-        let formatter = match (cfg!(feature = "date"), cfg!(feature = "time")) {
-            (true, true) => " on %Y-%m-%d %H:%M:%S",
-            (true, false) => " on %Y-%m-%d",
-            (false, true) => " on %H:%M:%S",
-            (_, _) => unreachable!(),
-        };
-
-        let datetime = Local::now().format(formatter);
-        _input.push_str(&datetime.to_string());
+        #[cfg(feature = "date")]
+        _input.push_str(" on <na>");
+        #[cfg(feature = "time")]
+        _input.push_str(" at <na>");
     }
 }
 
@@ -49,7 +43,7 @@ pub fn datetime(_input: &mut String) {
 #[macro_export]
 macro_rules! context {
     ($input:tt) => {
-        $input.push_str(&format!(" at {}:{}", file!(), line!()))
+        $input.push_str(&format!(" in {}:{}", file!(), line!()))
     };
 }
 

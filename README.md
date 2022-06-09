@@ -26,8 +26,8 @@ fn main() {
 Due to the focus on optimization, every functionality from the lib (except log macros) is offered by features. Plog contains the following features:
 | feature | description | additional dependence | why |
 | ------- | ----------- | --------------------- | --- |
-| `date` | Include date on the log, formatted as `%Y-%M-%D` | `chrono` | To format system date |
-| `time` | Similar to `date`, but logs the time with `%H:%M:%S` | `chrono` | To format system time |
+| `date` | Include date on the log, formatted as `%Y-%M-%D` | none | |
+| `time` | Similar to `date`, but logs the time with `%H:%M:%S` | none | |
 | `context`| Include the line and file that has required the log | none | |
 | `colored` | Use escape sequences to print stylized text | `crossterm` | Crossplatform escape sequences parser |
 | `persistent` | Add a persistent log handled by `LOG_FILEPATH` environment variable, saving each log on the pointed file | `parking_lot` | `const_mutex` for stable Rust and optimizations |
