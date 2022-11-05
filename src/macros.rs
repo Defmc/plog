@@ -15,8 +15,6 @@ pub mod colors {
     pub const GREY: Color = Color::Grey;
 }
 
-/// Date and time formatter. Temporary replacement for only a `<na>` message due to RUSTSEC-2020-0159
-/// <https://rustsec.org/advisories/RUSTSEC-2020-0159>
 /// `date` is formated by year, month and day
 /// `time` is formated by hour, minute and second
 #[allow(clippy::ptr_arg)]
@@ -25,10 +23,14 @@ pub mod colors {
 pub fn datetime(_input: &mut String) {
     #[cfg(any(feature = "date", feature = "time"))]
     {
-        #[cfg(feature = "date")]
-        _input.push_str(" on <na>");
-        #[cfg(feature = "time")]
-        _input.push_str(" at <na>");
+        use chrono::Local;
+        const FORMAT: &str = match (cfg!(feature = "date"), cfg!(feature = "time")) {
+            (true, true) => " on %Y/%m/%d at %H:%M:%S",
+            (true, false) => " on %Y/%m/%d",
+            (false, true) => " at %H:%M:%S",
+            (false, false) => "",
+        };
+        _input.push_str(Local::now().format(FORMAT));
     }
 }
 
