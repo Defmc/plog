@@ -15,22 +15,25 @@ pub mod colors {
     pub const GREY: Color = Color::Grey;
 }
 
-/// `date` is formated by year, month and day
-/// `time` is formated by hour, minute and second
+/// `local_date` is formated by year, month and day
+/// `local_time` is formated by hour, minute and second
 #[allow(clippy::ptr_arg)]
 // Impossible to use `&mut str`.
 // Function `String::push_str` is needed when `datetime` feature is enabled
 pub fn datetime(_input: &mut String) {
-    #[cfg(any(feature = "date", feature = "time"))]
+    #[cfg(any(feature = "local_date", feature = "local_time"))]
     {
-        use chrono::Local;
-        const FORMAT: &str = match (cfg!(feature = "date"), cfg!(feature = "time")) {
-            (true, true) => " on %Y/%m/%d at %H:%M:%S",
-            (true, false) => " on %Y/%m/%d",
-            (false, true) => " at %H:%M:%S",
-            (false, false) => "",
-        };
-        _input.push_str(&Local::now().format(FORMAT).to_string());
+        use time::OffsetDateTime;
+        if let Ok(now) = OffsetDateTime::now_local() {
+            if cfg!(feature = "local_date") {
+                let date = format!(" on {}/{}/{}", now.year(), now.month(), now.day());
+                _input.push_str(&date);
+            }
+            if cfg!(feature = "local_time") {
+                let time = format!(" at {}:{}:{}", now.hour(), now.minute(), now.second());
+                _input.push_str(&time);
+            }
+        }
     }
 }
 
