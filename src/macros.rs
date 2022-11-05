@@ -30,7 +30,7 @@ pub fn datetime(_input: &mut String) {
             (false, true) => " at %H:%M:%S",
             (false, false) => "",
         };
-        _input.push_str(Local::now().format(FORMAT));
+        _input.push_str(&Local::now().format(FORMAT).to_string());
     }
 }
 
