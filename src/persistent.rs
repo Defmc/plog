@@ -1,15 +1,15 @@
 /// Persistent log mode, enabled by `persistent` feature
 /// Writes to a file (defined with `LOG_FILEPATH` environment variable)
 /// Thread-safe, requires `parking_lot` to compile
-use parking_lot::{const_mutex, Mutex};
 use std::env;
 use std::error::Error;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Mutex;
 
 /// Output file, defined in the first `plog::log` call
-static LOG_FILE: Mutex<Option<File>> = const_mutex(None);
+static LOG_FILE: Mutex<Option<File>> = Mutex::new(None);
 
 /// A `LOG_FILE.is_some()` wrapper, used to not freeze the `LOG_FILE`
 static USE_LOG_FILE: AtomicBool = AtomicBool::new(false);
@@ -36,16 +36,16 @@ fn init_log_file() -> Result<(), Box<dyn Error>> {
         .create(true)
         .open(path)?;
 
-    let mut log_file = LOG_FILE.lock();
+    let mut log_file = LOG_FILE.lock()?;
     *log_file = Some(file);
     Ok(())
 }
 
 pub fn write_log<T: AsRef<str>>(prefix: &str, msg: &T) -> io::Result<()> {
-    let logfile = &mut LOG_FILE.lock();
-    writeln!(
-        &mut logfile.as_mut().unwrap(),
-        "[{prefix}]: {}",
-        msg.as_ref()
-    )
+    if let Ok(mut log_file) = LOG_FILE.lock() {
+        if let Some(file) = &mut *log_file {
+            writeln!(file, "[{prefix}]: {}", msg.as_ref())?
+        }
+    }
+    Ok(())
 }
