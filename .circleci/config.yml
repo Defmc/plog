@@ -1,0 +1,88 @@
+version: 2.1
+
+commands:
+  restore-cache:
+    steps:
+      - restore_cache:
+          name: Restore sccache cache
+          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
+
+  save-cache:
+    steps:
+      - save_cache:
+          name: Save sccache cache
+          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ epoch }}
+          paths:
+            - "~/.cache/sccache"
+
+jobs:
+  build-linux:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - restore-cache
+      - run: cargo --version
+      - run: cargo build --release
+      - save-cache
+
+  clippy:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - restore-cache
+      - run: cargo --version
+      - run: rustup component add clippy
+      - run: cargo clippy -- -D warnings
+      - save-cache
+
+  format:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - run: cargo fmt --all -- --check
+
+  test:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - restore-cache
+      - run: cargo --version
+      - run: cargo test --all -- --test-threads=1
+      - save-cache
+
+  udeps:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - restore-cache
+      - run: cargo --version
+      - run: cargo udeps --all-targets
+      - save-cache
+
+  
+  bench:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - restore-cache
+      - run: cargo --version
+      - run: cargo bench --all
+      - save-cache
+
+workflows:
+  test:
+    jobs: [build-linux, test, bench]
+  code-quality:
+    jobs: [format, clippy, udeps]
