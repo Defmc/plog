@@ -62,6 +62,7 @@ jobs:
     docker:
       - image: defmc/rust:latest
     resource_class: small
+    steps:
       - checkout
       - restore-cache
       - run: cargo --version
