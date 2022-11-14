@@ -66,10 +66,22 @@ jobs:
       - checkout
       - restore-cache
       - run: cargo --version
+        # FIXME: `cargo udeps` doesn't work on Alpine/x86_64-unknown-linux-musl:
+        # https://github.com/est31/cargo-udeps/issues/89
+        # https://github.com/sfackler/rust-openssl/issues/1462
       - run: cargo udeps --all-targets
       - save-cache
 
-  
+  audit:
+    docker:
+      - image: defmc/rust:latest
+    resource_class: small
+    steps:
+      - checkout
+      - run: cargo --version
+      - run: cargo generate-lockfile
+      - run: cargo audit
+
   bench:
     docker:
       - image: defmc/rust:latest
@@ -85,4 +97,6 @@ workflows:
   test:
     jobs: [build-linux, test, bench]
   code-quality:
-    jobs: [format, clippy, udeps]
+    jobs: [format, clippy]
+  security:
+    jobs: [audit]
