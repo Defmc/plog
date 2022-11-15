@@ -62,7 +62,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo udeps +nightly --all-targets
+      - run: cargo +nightly udeps --all-targets
       - save-cache
 
   audit:
@@ -72,7 +72,7 @@ jobs:
     steps:
       - checkout
       - run: cargo generate-lockfile
-      - run: cargo audit --all-targets
+      - run: cargo audit
 
   bench:
     docker:
