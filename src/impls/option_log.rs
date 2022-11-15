@@ -49,7 +49,7 @@ impl<T: Debug, U: Display> OptionLog<U> for Option<T> {
     /// ```
     fn show_none(self, _name: U) -> Self {
         #[cfg(feature = "impls")]
-        if let None = self {
+        if self.is_none() {
             info!("{_name} is empty");
         }
         self
