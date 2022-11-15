@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo build --release
+      - run: cargo build --release --all-features
       - save-cache
 
   clippy:
@@ -34,7 +34,7 @@ jobs:
       - checkout
       - restore-cache
       - run: rustup component add clippy
-      - run: cargo clippy -- -D warnings
+      - run: cargo clippy --all --all-features -- -D warnings
       - save-cache
 
   format:
@@ -52,7 +52,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo test --all -- --test-threads=1
+      - run: cargo test --all --all-features -- --show-output --test-threads=1
       - save-cache
 
   udeps:
@@ -62,7 +62,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo +nightly udeps --all-targets
+      - run: cargo +nightly udeps --all --all-features
       - save-cache
 
   audit:
@@ -81,7 +81,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo bench --all
+      - run: cargo bench --all --all-features
       - save-cache
 
 workflows:
