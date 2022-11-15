@@ -23,7 +23,6 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo --version
       - run: cargo build --release
       - save-cache
 
@@ -34,7 +33,6 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo --version
       - run: rustup component add clippy
       - run: cargo clippy -- -D warnings
       - save-cache
@@ -54,7 +52,6 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo --version
       - run: cargo test --all -- --test-threads=1
       - save-cache
 
@@ -65,11 +62,7 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo --version
-        # FIXME: `cargo udeps` doesn't work on Alpine/x86_64-unknown-linux-musl:
-        # https://github.com/est31/cargo-udeps/issues/89
-        # https://github.com/sfackler/rust-openssl/issues/1462
-        #- run: cargo udeps --all-targets
+      - run: cargo udeps +nightly --all-targets
       - save-cache
 
   audit:
@@ -78,10 +71,8 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - run: cargo --version
       - run: cargo generate-lockfile
-      # FIXME: Also with problem in openssl
-      #- run: cargo audit
+      - run: cargo audit
 
   bench:
     docker:
@@ -90,7 +81,6 @@ jobs:
     steps:
       - checkout
       - restore-cache
-      - run: cargo --version
       - run: cargo bench --all
       - save-cache
 
@@ -98,6 +88,6 @@ workflows:
   test:
     jobs: [build-linux, test, bench]
   code-quality:
-    jobs: [format, clippy]
+    jobs: [format, clippy, udeps]
   security:
     jobs: [audit]
