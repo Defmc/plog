@@ -72,7 +72,7 @@ jobs:
     steps:
       - checkout
       - run: cargo generate-lockfile
-      - run: cargo audit
+      - run: cargo audit --all-targets
 
   bench:
     docker:
