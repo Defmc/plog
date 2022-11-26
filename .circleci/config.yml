@@ -34,7 +34,7 @@ jobs:
       - checkout
       - restore-cache
       - run: rustup component add clippy
-      - run: cargo clippy -vv --all --all-features -- -D warnings
+      - run: cargo clippy -vv --all --all-features --examples -- -D warnings
       - save-cache
 
   format:
