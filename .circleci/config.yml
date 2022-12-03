@@ -1,6 +1,14 @@
 version: 2.1
 
 commands:
+  setup-cache-env:
+    steps:
+      - run: |
+          echo 'export RUSTFLAGS="$RUSTFLAGS -C link-arg=-fuse-ld=lld"' >> $BASH_ENV
+          echo 'export "RUSTC_WRAPPER"="sccache"' >> $BASH_ENV
+          echo 'export "SCCACHE_CACHE_SIZE"="1G"' >> $BASH_ENV
+          sccache --version
+
   restore-cache:
     steps:
       - restore_cache:
@@ -22,6 +30,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
       - restore-cache
       - run: cargo build -vv --release --all-features
       - save-cache
@@ -32,6 +41,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
       - restore-cache
       - run: rustup component add clippy
       - run: cargo clippy -vv --all --all-features --examples -- -D warnings
@@ -51,6 +61,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
       - restore-cache
       - run: cargo test -vv --all --all-features -- --show-output --test-threads=1
       - save-cache
@@ -61,6 +72,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
       - restore-cache
       - run: cargo +nightly udeps -vv --all --all-features
       - save-cache
@@ -80,6 +92,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
       - restore-cache
       - run: cargo bench -vv --all --all-features
       - save-cache
