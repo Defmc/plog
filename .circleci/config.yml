@@ -83,8 +83,11 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - setup-cache-env
+      - restore-cache
       - run: cargo generate-lockfile -vv
       - run: cargo audit
+      - save-cache
 
   bench:
     docker:
