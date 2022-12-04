@@ -13,13 +13,13 @@ commands:
     steps:
       - restore_cache:
           name: Restore sccache cache
-          key: sccache{{ .Environment.CIRCLE_JOB_REPONAME }}-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
+          key: sccache-{{ .Environment.CIRCLE_JOB_REPONAME }}-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
 
   save-cache:
     steps:
       - save_cache:
           name: Save sccache cache
-          key: sccache{{ .Environment.CIRCLE_JOB_REPONAME }}-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
+          key: sccache-{{ .Environment.CIRCLE_JOB_REPONAME }}-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ epoch }}
           paths:
             - "~/.cache/sccache"
 
