@@ -10,7 +10,7 @@ categories = ["development-tools", "accessibility", "command-line-utilities", "c
 
 [dependencies]
 crossterm = { version = "0.26.0", optional = true }
-time = { version = "0.3.17", features = ["local-offset"], optional = true }
+time = { version = "0.3.28", features = ["local-offset"], optional = true }
 
 [dev-dependencies]
 tokio = { version = "1.25.0", features = ["rt", "macros", "rt-multi-thread", "time"] }
